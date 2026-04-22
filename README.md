@@ -30,7 +30,7 @@ A intelligent flight search and multi-modal route builder that helps you find th
 1. Clone the repository
 ```bash
 git clone https://github.com/adityagarwal2005/farfinder.git
-cd farfinder/files
+cd farfinder
 ```
 
 2. Create a virtual environment
@@ -41,12 +41,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 3. Install dependencies
 ```bash
-pip install -r ../requirements.txt
+pip install -r requirements.txt
 ```
 
 4. Create a `.env` file in the project root
 ```bash
-cp ../.env.example .env
+cp .env.example .env
 ```
 
 5. Add your API keys to `.env`:
@@ -57,7 +57,6 @@ cp ../.env.example .env
 ### Running the Backend
 
 ```bash
-cd files
 uvicorn agent:app --reload --port 8001
 ```
 
@@ -84,17 +83,16 @@ Then navigate to `http://localhost:8000`
 
 ```
 farfinder/
-├── files/
-│   ├── agent.py          # FastAPI main application
-│   ├── airports.py       # Airport and location utilities
-│   ├── flights.py        # Flight search and pricing
-│   ├── routes.py         # Route building logic
-│   ├── index.html        # Frontend UI
-│   ├── script.js         # Frontend logic
-│   └── style.css         # Frontend styles
+├── agent.py              # FastAPI main application
+├── airports.py           # Airport and location utilities
+├── flights.py            # Flight search and pricing
+├── routes.py             # Route building logic
+├── index.html            # Frontend UI
+├── script.js             # Frontend logic
+├── style.css             # Frontend styles
 ├── requirements.txt      # Python dependencies
-├── .env.example         # Example environment file
-└── README.md            # This file
+├── .env.example          # Example environment file
+└── README.md             # This file
 ```
 
 ## License
