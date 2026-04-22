@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>FarFinder — Flight Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="shell">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="app-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M18 13v-2l-7-4V2.5a1.5 1.5 0 00-3 0V7l-7 4v2l7-2.17V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-7.17L18 13z"/></svg>
+        </div>
+        <div>
+          <div class="app-name">FarFinder</div>
+          <div class="app-sub">v3 · Smart Flight Search</div>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-tab="search">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M14.5 14.5l3 3"/></svg>
+          Search
+        </button>
+        <button class="nav-item" data-tab="calendar">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="4" width="16" height="13" rx="2"/><path d="M2 8h16M7 2v4M13 2v4"/></svg>
+          Price Calendar
+        </button>
+        <button class="nav-item" data-tab="flexible">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
+          Flexible Dates
+        </button>
+        <button class="nav-item" data-tab="budget">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v2m0 4v2m-2-5a2 2 0 014 0c0 2-4 2-4 4a2 2 0 004 0"/></svg>
+          Budget Finder
+        </button>
+        <button class="nav-item" data-tab="watchlist">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10 3l2.09 4.26L17 8.27l-3.5 3.41.83 4.82L10 14l-4.33 2.5.83-4.82L3 8.27l4.91-.71L10 3z"/></svg>
+          Watchlist
+          <span class="nav-badge" id="watchBadge" style="display:none">0</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="recent-section">
+        <p class="sidebar-label">Recent</p>
+        <div id="recentList"></div>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-icon-light">☀️</span>
+        <span class="theme-icon-dark">🌙</span>
+        <span id="themeLabel">Dark Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main-content">
+
+    <!-- ── SEARCH TAB ── -->
+    <section class="panel active" id="panel-search">
+      <header class="page-header">
+        <h1>Find the best flight deal</h1>
+        <p>Door-to-door cost including airport transfers · Nearby airports · Ground alternatives</p>
+      </header>
+
+      <div class="nl-search-bar">
+        <svg class="nl-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M14.5 14.5l3 3"/></svg>
+        <input id="nlInput" class="nl-input" type="text"
+          placeholder="&ldquo;Jaipur to Mumbai on 20 May, 200km radius&rdquo;"
+          autocomplete="off" spellcheck="false" />
+        <button id="nlBtn" class="nl-btn">Search</button>
+      </div>
+      <p class="hint-text">Also works in Hinglish — "Dilli se Bangalore 15 June 150km mein"</p>
+
+      <div class="divider-text"><span>or use the form</span></div>
+
+      <div class="form-card">
+        <div class="route-inputs">
+          <div class="field-group">
+            <label class="field-label">From</label>
+            <input id="fOrigin" class="field-input" type="text" placeholder="City or IATA code" />
+          </div>
+          <button class="swap-btn" id="swapBtn" title="Swap">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M11 2v9M11 11l-3-3M11 11l3-3M5 14V5M5 5L2 8M5 5l3 3"/>
+            </svg>
+          </button>
+          <div class="field-group">
+            <label class="field-label">To</label>
+            <input id="fDest" class="field-input" type="text" placeholder="City or IATA code" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Date</label>
+            <input id="fDate" class="field-input" type="date" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Passengers</label>
+            <div class="number-control">
+              <button class="nc-btn" id="sDn">−</button>
+              <span id="adultsVal">1</span>
+              <button class="nc-btn" id="sUp">+</button>
+            </div>
+          </div>
+          <div class="field-group field-narrow">
+            <label class="field-label">Non-stop</label>
+            <label class="switch">
+              <input type="checkbox" id="fDirect" />
+              <span class="switch-track"><span class="switch-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="radius-control">
+          <div class="radius-row">
+            <label class="field-label">Search radius</label>
+            <span class="radius-pill" id="radiusPill">100 km</span>
+          </div>
+          <input id="fRadius" type="range" class="slider" min="2" max="600" value="100" />
+          <div class="radius-chips">
+            <button class="chip" data-v="2">2 km</button>
+            <button class="chip" data-v="10">10 km</button>
+            <button class="chip" data-v="50">50 km</button>
+            <button class="chip active" data-v="100">100 km</button>
+            <button class="chip" data-v="200">200 km</button>
+            <button class="chip" data-v="400">400 km</button>
+            <button class="chip" data-v="600">600 km</button>
+          </div>
+        </div>
+
+        <button class="primary-btn" id="searchBtn">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M12 12l3 3"/></svg>
+          Search Flights
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div id="searchResults" style="display:none">
+        <div class="progress-card" id="searchLoader">
+          <div class="plane-anim">✈</div>
+          <p id="loaderMsg">Scanning airports…</p>
+          <div class="progress-track"><div class="progress-fill" id="loaderFill"></div></div>
+        </div>
+        <div class="alert-bar info" id="statusBar" style="display:none"></div>
+        <div class="insights-card" id="insightsCard" style="display:none"></div>
+
+        <div class="controls-row" id="controlsRow" style="display:none">
+          <div class="ctrl-group">
+            <span class="ctrl-label">Sort</span>
+            <button class="ctrl-chip active" data-sort="price">Cheapest</button>
+            <button class="ctrl-chip" data-sort="time">Fastest</button>
+            <button class="ctrl-chip" data-sort="stops">Non-stop first</button>
+          </div>
+          <div class="ctrl-group">
+            <span class="ctrl-label">Filter</span>
+            <button class="ctrl-chip active" data-type="all">All</button>
+            <button class="ctrl-chip" data-type="direct">Direct flight</button>
+            <button class="ctrl-chip" data-type="multimodal">Multi-modal</button>
+            <button class="ctrl-chip" data-type="ground_only">Ground only</button>
+          </div>
+        </div>
+
+        <div class="section-card" id="compareCard" style="display:none">
+          <h2 class="section-heading">Airport Comparison</h2>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr>
+                <th>#</th><th>Airport</th><th>Distance</th><th>Transfer</th>
+                <th>Flight</th><th>Last Mile</th><th>Total</th><th>Saves</th><th>Airline</th>
+              </tr></thead>
+              <tbody id="compareBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="weatherWidget" style="display:none" class="weather-strip"></div>
+
+        <h2 class="section-heading" id="routesHeading" style="display:none">Routes</h2>
+        <div id="routesContainer"></div>
+
+        <div class="empty-card" id="emptyCard" style="display:none">
+          <span>🔭</span>
+          <h3>No routes found</h3>
+          <p>Travelpayouts returns cached prices from recent user searches. Try popular routes like Delhi↔Mumbai or Bangalore↔Hyderabad, or widen your radius.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CALENDAR TAB ── -->
+    <section class="panel" id="panel-calendar">
+      <header class="page-header">
+        <h1>Price Calendar</h1>
+        <p>Compare fares day-by-day for an entire month. Green = cheapest. Click any day to search.</p>
+      </header>
+      <div class="form-card">
+        <div class="route-inputs">
+          <div class="field-group">
+            <label class="field-label">From (city or IATA)</label>
+            <input id="cOrigin" class="field-input" placeholder="JAI or Jaipur" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">To (city or IATA)</label>
+            <input id="cDest" class="field-input" placeholder="BOM or Mumbai" />
+          </div>
+        </div>
+        <div class="field-group" style="max-width:220px">
+          <label class="field-label">Month</label>
+          <input id="cMonth" class="field-input" type="month" />
+        </div>
+        <button class="primary-btn" id="calBtn">Show Calendar</button>
+      </div>
+      <div id="calResults" style="display:none">
+        <div class="progress-card" id="calLoader"><div class="plane-anim">✈</div><p>Fetching prices…</p></div>
+        <div class="alert-bar success" id="calBanner" style="display:none"></div>
+        <div class="alert-bar warn"    id="calWarn"   style="display:none"></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </section>
+
+    <!-- ── FLEXIBLE TAB ── -->
+    <section class="panel" id="panel-flexible">
+      <header class="page-header">
+        <h1>Flexible Dates</h1>
+        <p>A few days' flexibility can save thousands. See the cheapest window.</p>
+      </header>
+      <div class="form-card">
+        <div class="route-inputs">
+          <div class="field-group">
+            <label class="field-label">From (city or IATA)</label>
+            <input id="flOrigin" class="field-input" placeholder="JAI or Jaipur" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">To (city or IATA)</label>
+            <input id="flDest" class="field-input" placeholder="BOM or Mumbai" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Target Date</label>
+            <input id="flDate" class="field-input" type="date" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Flexibility (±days)</label>
+            <div class="number-control">
+              <button class="nc-btn" id="flDn">−</button>
+              <span id="flDaysVal">3</span>
+              <button class="nc-btn" id="flUp">+</button>
+            </div>
+          </div>
+        </div>
+        <button class="primary-btn" id="flBtn">Find Cheapest Window</button>
+      </div>
+      <div id="flResults" style="display:none">
+        <div class="progress-card" id="flLoader"><div class="plane-anim">✈</div><p>Checking dates…</p></div>
+        <div class="alert-bar success" id="flBanner" style="display:none"></div>
+        <div class="alert-bar warn"    id="flWarn"   style="display:none"></div>
+        <div class="flex-grid" id="flGrid"></div>
+      </div>
+    </section>
+
+    <!-- ── BUDGET TAB ── -->
+    <section class="panel" id="panel-budget">
+      <header class="page-header">
+        <h1>Budget Finder</h1>
+        <p>Enter your origin and budget — discover every destination you can reach.</p>
+      </header>
+      <div class="form-card">
+        <div class="field-group" style="max-width:320px">
+          <label class="field-label">Flying From</label>
+          <input id="bOrigin" class="field-input" placeholder="DEL or Delhi" />
+        </div>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label">Min Budget (₹)</label>
+            <input id="bMin" class="field-input" type="number" value="0" min="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Max Budget (₹)</label>
+            <input id="bMax" class="field-input" type="number" value="5000" />
+          </div>
+          <div class="field-group field-narrow">
+            <label class="field-label">Non-stop</label>
+            <label class="switch">
+              <input type="checkbox" id="bDirect" />
+              <span class="switch-track"><span class="switch-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+        <button class="primary-btn" id="budgetBtn">Discover Destinations</button>
+      </div>
+      <div id="budgetResults" style="display:none">
+        <div class="progress-card" id="budgetLoader"><div class="plane-anim">✈</div><p>Scanning…</p></div>
+        <div class="alert-bar warn" id="budgetWarn" style="display:none"></div>
+        <div class="dest-mosaic" id="destGrid"></div>
+        <div class="empty-card" id="budgetEmpty" style="display:none">
+          <span>🗺️</span><h3>No destinations found</h3>
+          <p>Try increasing your budget or use a major hub (DEL, BOM, BLR) as origin.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── WATCHLIST TAB ── -->
+    <section class="panel" id="panel-watchlist">
+      <header class="page-header">
+        <h1>Watchlist</h1>
+        <p>Routes you've saved. Click to re-search anytime.</p>
+      </header>
+      <div class="empty-card" id="watchlistEmpty">
+        <span>⭐</span>
+        <h3>No saved routes</h3>
+        <p>Click the ☆ Save button on any route card to save it here.</p>
+      </div>
+      <div class="watch-grid" id="watchGrid"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══ TRIP COST MODAL ═══ -->
+<dialog class="modal" id="tripModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">Full Trip Breakdown</h2>
+      <button class="modal-close" id="modalClose">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</dialog>
+
+<div id="toastEl" class="toast" style="display:none"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
